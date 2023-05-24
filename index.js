@@ -1,5 +1,5 @@
+
 import express from 'express';
-import fs from 'fs';
 
 // -----------------------------------
 
@@ -47,8 +47,10 @@ app.post('/todos', async (req, res) => {
     res.json(newTodo);
 })
 
+
 // ------------------------------------
 
 app.listen(port, () => {
     console.log(`Here we go on port ${port}`);
 })
+
