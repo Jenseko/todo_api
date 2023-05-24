@@ -1,54 +1,78 @@
 
 import express from 'express';
+import { FileHandler } from "./Model.js";
 
 // -----------------------------------
 
+
 const app = express();
-const port = 3005;
+const port = 3000;
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send('It`s working!');
-})
+});
 
-// ------------------------------------
 
-let todos = [];
+// ---- MODEL -------------------------
+
+
+const TodosModel = await FileHandler("./data/Todos.json");
+
+
+// ---- GET ~/todos -------------------
+
 
 app.get('/todos', async (req, res) => {
-    try {
-        res.json(todos);
-    } catch (error) {
-        console.error(error)
-        res.status(500).send('Oh, what is happened?!');
-    }
-});
-
-app.get('/todos/:id', async (req, res) => {
-    const { id } = req.params;
-    const todo = todos.find(todo => todo.id === id);
-
-    if (!todo) {
-        res.status(404).json({ error: 'Todo not found' });
-    } else {
-        res.json(todo);
-    }
+    const data = TodosModel.getData();
+    res.send(data);
 });
 
 
-app.post('/todos', async (req, res) => {
-    const data = await readFile('data.json');
-    console.log(JSON.parse(data));
-    let todosId = data.todos.length;
-    todosId++;
-    const newTodo = req.body;
-    todos.push(newTodo);
-    res.json(newTodo);
+// ---- GET ~/todos/:id ---------------
+
+
+app.get('/todos/:id', (req, res) => {
+    const id = req.params.id;
+    const data = TodosModel.getOne(id);
+    res.send(data);
+});
+
+
+// ---- POST ~/todos ------------------
+
+
+app.post('/todos', (req, res) => {
+    const data = req.body;
+    TodosModel.addDataEntry(data);
+    res.send(data);
 })
 
 
-// ------------------------------------
+// ----- PUT ~/todos/:id --------------
+
+
+app.put('/todos/:id', (req, res) => {
+    const updateData = req.body;
+    const id = req.params.id;
+    const result = TodosModel.updateOne(id, updateData);
+    res.send(result);
+});
+
+
+// ----- DELETE ~/todos/:id -----------
+
+
+app.delete('/todos/:id', (req, res) => {
+    const id = req.params.id;
+    TodosModel.deleteOne(id);
+    res.send("Deleted");
+})
+
+
+// -------------------
+
 
 app.listen(port, () => {
     console.log(`Here we go on port ${port}`);
