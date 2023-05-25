@@ -1,10 +1,10 @@
 
 import fs from 'node:fs/promises';
-import { uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 // ----------------------------------
 
-export const Filehandler = async (path) => {
+export const FileHandler = async (path) => {
     let data = await fs.readFile(path);
     data = JSON.parse(data);
 
@@ -13,9 +13,11 @@ export const Filehandler = async (path) => {
         return Object.values(data);
     }
 
+
     const getOne = (id) => {
         return data[id];
     }
+
 
     const addDataEntry = async (dataEntry) => {
         const newID = uuidv4();
@@ -24,10 +26,12 @@ export const Filehandler = async (path) => {
         fs.writeFile(path, JSON.stringify(data));
     }
 
+
     const deleteOne = (id) => {
         delete data[id];
         fs.writeFile(path, JSON.stringify(data));
-    }
+    };
+
 
     const updateOne = (id, updateData) => {
         const updateTarget = data[id];
