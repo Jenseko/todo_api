@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
     res.send('It`s working!');
 });
 
-
 const path = './data/todos.json';
 
 // ---- MODEL -------------------------
