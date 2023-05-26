@@ -1,25 +1,30 @@
 
 import express from 'express';
+import cors from 'cors';
 import { FileHandler } from "./Model.js";
 
 // -----------------------------------
 
 
 const app = express();
-const port = 3000;
+const port = 3004;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('It`s working!');
 });
 
 
+const path = './data/todos.json';
+
 // ---- MODEL -------------------------
 
 
-const TodosModel = await FileHandler("./data/Todos.json");
-
+const TodosModel = await FileHandler(
+    new URL(path, (import.meta.url))
+);
 
 // ---- GET ~/todos -------------------
 
@@ -46,6 +51,7 @@ app.get('/todos/:id', (req, res) => {
 app.post('/todos', (req, res) => {
     const data = req.body;
     TodosModel.addDataEntry(data);
+    // console.log(data);
     res.send(data);
 })
 
@@ -57,6 +63,7 @@ app.put('/todos/:id', (req, res) => {
     const updateData = req.body;
     const id = req.params.id;
     const result = TodosModel.updateOne(id, updateData);
+    console.log(result);
     res.send(result);
 });
 
