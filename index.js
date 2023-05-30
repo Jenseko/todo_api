@@ -7,7 +7,7 @@ import { FileHandler } from "./Model.js";
 
 
 const app = express();
-const port = 3004;
+const port = process.env.Port || 3004;
 
 app.use(express.json());
 app.use(cors());
@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 const path = './data/todos.json';
+
 
 // ---- MODEL -------------------------
 
