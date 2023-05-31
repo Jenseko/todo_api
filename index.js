@@ -7,10 +7,12 @@ import { FileHandler } from "./Model.js";
 
 
 const app = express();
-const port = process.env.Port || 3004;
+const port = process.env.Port || 3001;
 
 app.use(express.json());
+app.use(express.static("../todo-app_frontend/build"));
 app.use(cors());
+
 
 app.get('/', (req, res) => {
     res.send('It`s working!');
